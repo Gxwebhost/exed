@@ -1,8 +1,8 @@
-
 import { promises as fs } from "fs";
 import path from "path";
 
-const countFile = path.resolve("./count.txt");
+// Use /tmp directory for writable file storage on Vercel
+const countFile = path.join("/tmp", "count.txt");
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
@@ -25,6 +25,7 @@ export default async function handler(req, res) {
       const count = parseInt(data) || 0;
       res.status(200).json({ count });
     } catch {
+      // File doesn't exist yet or unreadable, so count is 0
       res.status(200).json({ count: 0 });
     }
   } else {
